@@ -6,7 +6,7 @@ context:
 
 #
 package:
-  name: opencv-titan
+  name: opencv
   version: ${{ version }}
 
 source:
