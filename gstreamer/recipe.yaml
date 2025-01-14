@@ -1,0 +1,398 @@
+# Source: https://github.com/selkies-project/selkies-gstreamer/tree/main/addons/conda
+# https://github.com/conda-forge/gstreamer-feedstock/issues/97#issuecomment-2075394785
+# https://github.com/NVIDIA/nvidia-docker/issues/103
+# https://github.com/conda-forge/ffmpeg-feedstock/blob/main/recipe/conda_build_config.yaml
+# https://github.com/conda-forge/libnvjpeg-feedstock/tree/main/recipe
+# https://github.com/FFmpeg/nv-codec-headers/blob/master/include/ffnvcodec/nvEncodeAPI.h
+# https://gist.github.com/kiyoon/55a7bf31f926edec94abebb22dc3eabd
+# https://download.nvidia.com/XFree86/Linux-x86_64/550.90.07/README/installedcomponents.html
+# https://gist.github.com/corenel/a615b6f7eb5b5425aa49343a7b409200
+context:
+  name: gstreamer
+  version: 1.24.10
+  python: 3.12
+
+recipe:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/archive/${{ version }}/gstreamer-${{ version }}.tar.gz
+  sha256: e8a26daad0db625fa617ab2602ab7681e081c8e2a0c8484c143fe0ad9bfcda53
+
+outputs:
+  - package:
+      name: gstreamer
+    build:
+      skip: win or osx
+    requirements:
+      build:
+        - cargo-c
+        - python 3.12.*
+        - if: build_platform != target_platform
+          then: cross-python_${{ target_platform }} ${{ python }}
+        - if: linux64
+          then: sysroot_linux-64 2.17
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - ${{ compiler('rust') }}
+        - pkg-config
+        - autoconf
+        - automake
+        - binutils
+        - bison
+        - file
+        - flex
+        - ca-certificates
+        - curl
+        - git
+        - git-lfs
+        - gmp
+        - gobject-introspection
+        - gsl
+        - bzip2
+        - cmake
+        - libcap
+        - libiconv
+        - libtool
+        - libsoup
+        - libgcrypt
+        - libvulkan-loader
+        - libvulkan-headers
+        - nasm
+        - valgrind
+        - yasm
+        - meson
+        - ninja
+        - tomli
+        - perl
+        - openssl
+        - zlib
+        - glew
+        - glfw
+        - if: linux
+          then: ${{ cdt('mesa-libgl-devel') }}
+        - if: linux
+          then: ${{ cdt('mesa-libegl-devel') }}
+        - if: linux
+          then: ${{ cdt('mesa-libgbm') }}
+        - if: linux
+          then: ${{ cdt('libdrm-devel') }}
+        - if: linux
+          then: ${{ cdt('mesa-dri-drivers') }}
+        - if: linux
+          then: ${{ cdt('libglvnd-devel') }}
+        - if: linux
+          then: ${{ cdt('libglvnd-glx') }}
+        - if: linux
+          then: ${{ cdt('libglvnd-egl') }}
+        - if: linux
+          then: ${{ cdt('libglvnd-gles') }}
+        - if: linux
+          then: ${{ cdt('libglvnd-opengl') }}
+        - if: linux
+          then: ${{ cdt('libxshmfence-devel') }}
+        - if: linux
+          then: ${{ cdt('kernel-headers') }}
+        - if: linux
+          then: ${{ cdt('mesa-khr-devel') }}
+        - if: linux
+          then: ${{ cdt('libselinux-devel') }}
+      host:
+        - python 3.12.*
+        - ffmpeg 6.1.*
+        # - abseil-cpp
+        - ascii-art
+        - libass
+        - bash-completion
+        - curl
+        - libcurl
+        - libdrm
+        - libva
+        - libusb
+        - elfutils
+        - gettext
+        - libunwind
+        - nettle
+        - openssl
+        - libgraphene
+        - libiconv
+        - libxml2
+        - flite-dev
+        - glib
+        - glib-networking
+        - gnutls
+        - gdk-pixbuf
+        - gtk2
+        - gtk3
+        - librsvg
+        - imath
+        - cairo
+        - pango
+        - pygobject
+        - popt
+        - setuptools
+        - srt
+        - zlib
+        - libffi
+        - libtool
+        - openexr
+        - openjpeg
+        - libjpeg-turbo
+        - libcap
+        - libxslt
+        - bzip2
+        - libdc1394
+        - libde265
+        - libwebp
+        - libvpx
+        - openh264
+        - x264
+        - x265
+        - aom
+        - dav1d
+        - rav1e
+        - svt-av1
+        - srt
+        - lcms2
+        - libflac
+        - libogg
+        - libopus
+        - libsndfile
+        - libtheora
+        - libvorbis
+        - mpg123
+        - lame
+        - libpng
+        - if: linux
+          then: libudev
+        - if: linux
+          then: jack
+        - if: linux
+          then: pthread-stubs
+        - if: linux
+          then: pulseaudio-client
+        - if: linux
+          then: alsa-lib
+        - if: linux
+          then: mesalib
+        - if: linux
+          then: xcb-proto
+        - if: linux
+          then: libxcb
+        - if: linux
+          then: xorg-kbproto
+        - if: linux
+          then: libxkbcommon
+        - if: linux
+          then: libxkbfile
+        - if: linux
+          then: xorg-libxcursor
+        - if: linux
+          then: xorg-damageproto
+        - if: linux
+          then: xorg-libxdamage
+        - if: linux
+          then: xorg-libxft
+        - if: linux
+          then: xorg-videoproto
+        - if: linux
+          then: xorg-libxxf86vm
+        - if: linux
+          then: xorg-xf86vidmodeproto
+        - if: linux
+          then: xorg-libxau
+        - if: linux
+          then: xorg-libxdmcp
+        - if: linux
+          then: xorg-compositeproto
+        - if: linux
+          then: xorg-libxcomposite
+        - if: linux
+          then: xorg-fixesproto
+        - if: linux
+          then: xorg-libxfixes
+        - if: linux
+          then: xorg-fontsproto
+        - if: linux
+          then: xorg-xf86bigfontproto
+        - if: linux
+          then: xorg-font-util
+        - if: linux
+          then: xorg-libxres
+        - if: linux
+          then: xorg-glproto
+        - if: linux
+          then: xorg-libice
+        - if: linux
+          then: xorg-xextproto
+        - if: linux
+          then: xorg-libxext
+        - if: linux
+          then: xorg-libxmu
+        - if: linux
+          then: xorg-randrproto
+        - if: linux
+          then: xorg-libxrandr
+        - if: linux
+          then: xorg-renderproto
+        - if: linux
+          then: xorg-libxrender
+        - if: linux
+          then: xorg-libsm
+        - if: linux
+          then: xorg-libxtst
+        - if: linux
+          then: xorg-libxt
+        - if: linux
+          then: xorg-inputproto
+        - if: linux
+          then: xorg-libxi
+        - if: linux
+          then: xorg-presentproto
+        - if: linux
+          then: xorg-libxpm
+        - if: linux
+          then: xorg-xineramaproto
+        - if: linux
+          then: xorg-libxinerama
+        - if: linux
+          then: xorg-xproto
+        - if: linux
+          then: xorg-libx11
+        - if: linux
+          then: expat
+        - if: linux
+          then: wayland-protocols
+        - if: linux
+          then: wayland
+        - fluidsynth
+        - opencv
+        - onnxruntime
+        - if: linux
+          then: speex
+        - if: win
+          then: m2w64-speex
+        - libqrencode
+        - if: linux or osx
+          then: zbar
+      run:
+        - python 3.12.*
+        - pygobject
+        - libgraphene
+        - ${{ pin_compatible('glib') }}
+        - if: linux
+          then: ${{ cdt('xorg-x11-server-xvfb') }}
+        - if: linux
+          then: pulseaudio
+        - if: linux
+          then: pulseaudio-client
+        - if: linux
+          then: xcb-proto
+        - if: linux
+          then: libxcb
+        - if: linux
+          then: xorg-kbproto
+        - if: linux
+          then: libxkbcommon
+        - if: linux
+          then: libxkbfile
+        - if: linux
+          then: xorg-libxcursor
+        - if: linux
+          then: xorg-damageproto
+        - if: linux
+          then: xorg-libxdamage
+        - if: linux
+          then: xorg-libxft
+        - if: linux
+          then: xorg-videoproto
+        - if: linux
+          then: xorg-libxxf86vm
+        - if: linux
+          then: xorg-xf86vidmodeproto
+        - if: linux
+          then: xorg-libxau
+        - if: linux
+          then: xorg-libxdmcp
+        - if: linux
+          then: xorg-compositeproto
+        - if: linux
+          then: xorg-libxcomposite
+        - if: linux
+          then: xorg-fixesproto
+        - if: linux
+          then: xorg-libxfixes
+        - if: linux
+          then: xorg-fontsproto
+        - if: linux
+          then: xorg-xf86bigfontproto
+        - if: linux
+          then: xorg-font-util
+        - if: linux
+          then: xorg-libxres
+        - if: linux
+          then: xorg-glproto
+        - if: linux
+          then: xorg-libice
+        - if: linux
+          then: xorg-xextproto
+        - if: linux
+          then: xorg-libxext
+        - if: linux
+          then: xorg-libxmu
+        - if: linux
+          then: xorg-randrproto
+        - if: linux
+          then: xorg-libxrandr
+        - if: linux
+          then: xorg-renderproto
+        - if: linux
+          then: xorg-libxrender
+        - if: linux
+          then: xorg-libsm
+        - if: linux
+          then: xorg-libxtst
+        - if: linux
+          then: xorg-libxt
+        - if: linux
+          then: xorg-inputproto
+        - if: linux
+          then: xorg-libxi
+        - if: linux
+          then: xorg-presentproto
+        - if: linux
+          then: xorg-libxpm
+        - if: linux
+          then: xorg-xineramaproto
+        - if: linux
+          then: xorg-libxinerama
+        - if: linux
+          then: xorg-xproto
+        - if: linux
+          then: xorg-libx11
+        - if: linux
+          then: expat
+        - if: linux
+          then: wayland-protocols
+        - if: linux
+          then: wayland
+        - cuda-nvrtc 12.4.*
+        - libnvjpeg 12.3.*
+      run_exports:
+        # - ${{ pin_compatible('gstreamer', upper_bound='x.x') }}
+        # - ${{ pin_compatible('gst-plugins-base', upper_bound='x.x') }}
+        # - ${{ pin_compatible('gst-plugins-good', upper_bound='x.x') }}
+        # - ${{ pin_compatible('gst-plugins-ugly', upper_bound='x.x') }}
+        # - ${{ pin_compatible('gst-plugins-bad', upper_bound='x.x') }}
+        # - ${{ pin_compatible('gst-libav', upper_bound='x.x') }}
+        # - ${{ pin_compatible('gst-python', upper_bound='x.x') }}
+
+
+about:
+  summary: GStreamer
+  license: GPL-2.0-or-later
+  homepage: https://gstreamer.freedesktop.org
+  repository: https://gitlab.freedesktop.org/gstreamer/gstreamer
+  documentation: https://gstreamer.freedesktop.org/documentation/
+

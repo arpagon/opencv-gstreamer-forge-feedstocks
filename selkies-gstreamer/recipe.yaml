@@ -1,0 +1,201 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+schema_version: 1
+
+context:
+  name: gstreamer
+  gstreamer_version: 1.24.10
+  python: 3.12
+  posix: "'m2-' if win else ''"
+
+recipe:
+  name: ${{ name|lower }}
+  version: ${{ SELKIES_VERSION }}
+
+source:
+  - url: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/archive/${{ gstreamer_version }}/gstreamer-${{ gstreamer_version }}.tar.gz
+
+build:
+  skip: not linux
+  script:
+    secrets:
+      - PYPI_PACKAGE
+      - PACKAGE_VERSION
+      - SELKIES_BUILD
+      - SELKIES_SOURCE
+  activate_in_script: true
+
+requirements:
+  build:
+    - ${{ stdlib('c') }}
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('rust') }}
+    - if: build_platform != target_platform
+      then: python ${{ python }}
+    - if: build_platform != target_platform
+      then: cross-python_${{ target_platform }} ${{ python }}
+    - cargo-c
+    - pkg-config
+    - binutils
+    - ${{ posix }}bison
+    - file
+    - ${{ posix }}flex
+    - ca-certificates
+    - curl
+    - gettext-tools
+    - git
+    - git-lfs
+    - gmp
+    - gobject-introspection
+    - gsl
+    - libcap
+    - libtool
+    - libgcrypt
+    - nasm
+    - yasm
+    - meson
+    - ninja
+    - tomli
+    - perl
+    - openssl
+  host:
+    - python ${{ python }}
+    - pip
+    - libdrm
+    - openssl
+    - libzlib
+    - glib
+    - glib-networking
+    - gnutls
+    - pygobject
+    - setuptools
+    - libvpx
+    - openh264
+    - x264
+    - x265
+    - aom
+    - svt-av1
+    - libopus
+    - if: linux
+      then: libegl-devel
+    - if: linux
+      then: libgl-devel
+    - if: linux
+      then: libgles-devel
+    - if: linux
+      then: libglx-devel
+    - if: linux
+      then: libopengl-devel
+    - if: linux
+      then: libva
+    - if: linux
+      then: libudev
+    - if: linux
+      then: jack
+    - if: linux
+      then: pthread-stubs
+    - if: linux
+      then: pulseaudio-client
+    - if: linux
+      then: alsa-lib
+    - if: linux
+      then: libxcb
+    - if: linux
+      then: xorg-libxcvt
+    - if: linux
+      then: xorg-libxdamage
+    - if: linux
+      then: xorg-libxfixes
+    - if: linux
+      then: xorg-libxext
+    - if: linux
+      then: xorg-libxrandr
+    - if: linux
+      then: xorg-libxrender
+    - if: linux
+      then: xorg-libxtst
+    - if: linux
+      then: xorg-libxi
+    - if: linux
+      then: xorg-libxv
+    - if: linux
+      then: xorg-libx11
+    - if: linux
+      then: wayland-protocols
+    - if: linux
+      then: wayland
+  run:
+    - python ${{ python }}
+    - pygobject
+    # Currently installed with pip because of python-xlib patch
+    # - websockets
+    # - basicauth
+    # - gputil
+    # - prometheus_client
+    # - msgpack-python
+    # - pynput
+    # - psutil
+    # - watchdog
+    # - pillow
+    # - python-xlib
+    - ${{ pin_compatible('glib') }}
+    - if: linux
+      then: pulseaudio
+    - if: linux
+      then: pulseaudio-client
+    - if: linux
+      then: libva
+    - if: linux
+      then: libva-utils
+    - if: linux
+      then: libxcb
+    - if: linux
+      then: xorg-libxcvt
+    - if: linux
+      then: xorg-libxdamage
+    - if: linux
+      then: xorg-libxfixes
+    - if: linux
+      then: xorg-libxext
+    - if: linux
+      then: xorg-libxrandr
+    - if: linux
+      then: xorg-libxrender
+    - if: linux
+      then: xorg-libxtst
+    - if: linux
+      then: xorg-libxi
+    - if: linux
+      then: xorg-libxv
+    - if: linux
+      then: xorg-libx11
+    - if: linux
+      then: wayland-protocols
+    - if: linux
+      then: wayland
+    - if: linux
+      then: bash
+    - if: linux
+      then: wmctrl-cli
+    - if: linux
+      then: xdotool
+    - if: linux
+      then: xsel
+    # NVIDIA NVRTC/nvJPEG dependency, https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvrtc/LICENSE.txt
+    - cuda-nvrtc 12.4.*
+    - libnvjpeg 12.3.*
+
+outputs:
+  - package:
+      name: ${{ name|lower }}
+
+about:
+  summary: Open-Source Low-Latency Accelerated Linux WebRTC HTML5 Remote Desktop Streaming Platform for Self-Hosting, Containers, Kubernetes, or Cloud/HPC
+  license: MPL-2.0
+  license_url: https://github.com/selkies-project/selkies-gstreamer/blob/main/LICENSE
+  homepage: https://github.com/selkies-project/selkies-gstreamer
+  repository: https://github.com/selkies-project/selkies-gstreamer
+  documentation: https://github.com/selkies-project/selkies-gstreamer/blob/main/README.md
+

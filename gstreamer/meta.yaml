@@ -1,0 +1,273 @@
+{% set name = "gstreamer-selkies" %}
+{% set version = "1.24.2" %}
+{% set python = "3.12" %}
+{% set ffmpeg = ">=6.1.*" %}
+{% set posix = 'm2-' if win else '' %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/archive/{{ version }}/gstreamer-{{ version }}.tar.gz
+
+about:
+  home: https://gstreamer.freedesktop.org
+  summary: GStreamer build for Selkies including GPL (Ugly) plugins
+  license: GPL-2.0-or-later
+  doc_url: https://gstreamer.freedesktop.org/documentation/
+  dev_url: https://gitlab.freedesktop.org/gstreamer/gstreamer
+
+build:
+  skip: true # [win or osx]
+
+outputs:
+  - name: "{{ name|lower }}"
+    type: conda_v2
+    build:
+      run_exports:
+        - {{ pin_compatible('gstreamer', max_pin='x.x') }}
+        - {{ pin_compatible('gst-plugins-base', max_pin='x.x') }}
+        - {{ pin_compatible('gst-plugins-good', max_pin='x.x') }}
+        - {{ pin_compatible('gst-plugins-ugly', max_pin='x.x') }}
+        - {{ pin_compatible('gst-plugins-bad', max_pin='x.x') }}
+        - {{ pin_compatible('gst-libav', max_pin='x.x') }}
+        - {{ pin_compatible('gst-python', max_pin='x.x') }}
+        - {{ pin_compatible('gstreamer-orc', max_pin='x.x') }}
+
+requirements:
+  build:
+    - sysroot_linux-64 2.17  # [linux64]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('rust') }}
+    - cargo-c
+    - python {{ python }}
+    - cross-python_{{ target_platform }} {{ python }}  # [build_platform != target_platform]
+    - pkg-config
+    - autoconf
+    - automake
+    - binutils
+    - {{ posix }}bison
+    - file
+    - {{ posix }}flex
+    - ca-certificates
+    - curl
+    - git
+    - git-lfs
+    - gmp
+    - gobject-introspection
+    - gsl
+    - bzip2
+    - cmake
+    - libcap
+    - libiconv
+    - libtool
+    - libsoup
+    - libgcrypt
+    - libvulkan-loader
+    - libvulkan-headers
+    - nasm
+    - valgrind
+    - yasm
+    - meson
+    - ninja
+    - tomli
+    - perl
+    - openssl
+    - zlib
+    - glew
+    - glfw
+    - {{ cdt('mesa-libgl-devel') }}  # [linux]
+    - {{ cdt('mesa-libegl-devel') }}  # [linux]
+    - {{ cdt('mesa-libgbm') }}  # [linux]
+    - {{ cdt('libdrm-devel') }}  # [linux]
+    - {{ cdt('mesa-dri-drivers') }}  # [linux]
+    - {{ cdt('libglvnd-devel') }}  # [linux]
+    - {{ cdt('libglvnd-glx') }}  # [linux]
+    - {{ cdt('libglvnd-egl') }}  # [linux]
+    - {{ cdt('libglvnd-gles') }}  # [linux]
+    - {{ cdt('libglvnd-opengl') }}  # [linux]
+    - {{ cdt('libxshmfence-devel') }}  # [linux]
+    - {{ cdt('kernel-headers') }}  # [linux]
+    - {{ cdt('mesa-khr-devel') }}  # [linux]
+    - {{ cdt('libselinux-devel') }}  # [linux]
+  host:
+    - python {{ python }}
+    - ffmpeg {{ ffmpeg }}
+    - abseil-cpp
+    - ascii-art
+    - libass
+    - bash-completion
+    - curl
+    - libcurl
+    - libdrm
+    - libva
+    - libusb
+    - elfutils
+    - gettext
+    - libunwind
+    - nettle
+    - openssl
+    - libgraphene
+    - libiconv
+    - libxml2
+    - flite-dev
+    - glib
+    - glib-networking
+    - gnutls
+    - gdk-pixbuf
+    - gtk2
+    - gtk3
+    - librsvg
+    - imath
+    - cairo
+    - pango
+    - pygobject
+    - popt
+    - setuptools
+    - srt
+    - zlib
+    - libffi
+    - libtool
+    - openexr
+    - openjpeg
+    - libjpeg-turbo
+    - libcap
+    - libxslt
+    - bzip2
+    - libdc1394
+    - libde265
+    - libwebp
+    - libvpx
+    - openh264
+    - x264
+    - x265
+    - aom
+    - dav1d
+    - rav1e
+    - svt-av1
+    - srt
+    - lcms2
+    - libflac
+    - libogg
+    - libopus
+    - libsndfile
+    - libtheora
+    - libvorbis
+    - mpg123
+    - lame
+    - libpng
+    - libudev                            # [linux]
+    - jack                               # [linux]
+    - pthread-stubs                      # [linux]
+    - pulseaudio-client                  # [linux]
+    - alsa-lib                           # [linux]
+    - mesalib                            # [linux]
+    - xcb-proto                          # [linux]
+    - libxcb                             # [linux]
+    - xorg-kbproto                       # [linux]
+    - libxkbcommon                       # [linux]
+    - libxkbfile                         # [linux]
+    - xorg-libxcursor                    # [linux]
+    - xorg-damageproto                   # [linux]
+    - xorg-libxdamage                    # [linux]
+    - xorg-libxft                        # [linux]
+    - xorg-videoproto                    # [linux]
+    - xorg-libxxf86vm                    # [linux]
+    - xorg-xf86vidmodeproto              # [linux]
+    - xorg-libxau                        # [linux]
+    - xorg-libxdmcp                      # [linux]
+    - xorg-compositeproto                # [linux]
+    - xorg-libxcomposite                 # [linux]
+    - xorg-fixesproto                    # [linux]
+    - xorg-libxfixes                     # [linux]
+    - xorg-fontsproto                    # [linux]
+    - xorg-xf86bigfontproto              # [linux]
+    - xorg-font-util                     # [linux]
+    - xorg-libxres                       # [linux]
+    - xorg-glproto                       # [linux]
+    - xorg-libice                        # [linux]
+    - xorg-xextproto                     # [linux]
+    - xorg-libxext                       # [linux]
+    - xorg-libxmu                        # [linux]
+    - xorg-randrproto                    # [linux]
+    - xorg-libxrandr                     # [linux]
+    - xorg-renderproto                   # [linux]
+    - xorg-libxrender                    # [linux]
+    - xorg-libsm                         # [linux]
+    - xorg-libxtst                       # [linux]
+    - xorg-libxt                         # [linux]
+    - xorg-inputproto                    # [linux]
+    - xorg-libxi                         # [linux]
+    - xorg-presentproto                  # [linux]
+    - xorg-libxpm                        # [linux]
+    - xorg-xineramaproto                 # [linux]
+    - xorg-libxinerama                   # [linux]
+    - xorg-xproto                        # [linux]
+    - xorg-libx11                        # [linux]
+    - expat                              # [linux]
+    - wayland-protocols                  # [linux]
+    - wayland                            # [linux]
+    - fluidsynth
+    - opencv
+    - onnxruntime
+    - speex                              # [linux]
+    - m2w64-speex                        # [win]
+    - libqrencode
+    - zbar                               # [linux or osx]
+  run:
+    - python {{ python }}
+    - pygobject
+    - libgraphene
+    - {{ pin_compatible('glib') }}
+    - {{ cdt('xorg-x11-server-xvfb') }}  # [linux]
+    - pulseaudio                         # [linux]
+    - pulseaudio-client                  # [linux]
+    - xcb-proto                          # [linux]
+    - libxcb                             # [linux]
+    - xorg-kbproto                       # [linux]
+    - libxkbcommon                       # [linux]
+    - libxkbfile                         # [linux]
+    - xorg-libxcursor                    # [linux]
+    - xorg-damageproto                   # [linux]
+    - xorg-libxdamage                    # [linux]
+    - xorg-libxft                        # [linux]
+    - xorg-videoproto                    # [linux]
+    - xorg-libxxf86vm                    # [linux]
+    - xorg-xf86vidmodeproto              # [linux]
+    - xorg-libxau                        # [linux]
+    - xorg-libxdmcp                      # [linux]
+    - xorg-compositeproto                # [linux]
+    - xorg-libxcomposite                 # [linux]
+    - xorg-fixesproto                    # [linux]
+    - xorg-libxfixes                     # [linux]
+    - xorg-fontsproto                    # [linux]
+    - xorg-xf86bigfontproto              # [linux]
+    - xorg-font-util                     # [linux]
+    - xorg-libxres                       # [linux]
+    - xorg-glproto                       # [linux]
+    - xorg-libice                        # [linux]
+    - xorg-xextproto                     # [linux]
+    - xorg-libxext                       # [linux]
+    - xorg-libxmu                        # [linux]
+    - xorg-randrproto                    # [linux]
+    - xorg-libxrandr                     # [linux]
+    - xorg-renderproto                   # [linux]
+    - xorg-libxrender                    # [linux]
+    - xorg-libsm                         # [linux]
+    - xorg-libxtst                       # [linux]
+    - xorg-libxt                         # [linux]
+    - xorg-inputproto                    # [linux]
+    - xorg-libxi                         # [linux]
+    - xorg-presentproto                  # [linux]
+    - xorg-libxpm                        # [linux]
+    - xorg-xineramaproto                 # [linux]
+    - xorg-libxinerama                   # [linux]
+    - xorg-xproto                        # [linux]
+    - xorg-libx11                        # [linux]
+    - expat                              # [linux]
+    - wayland-protocols                  # [linux]
+    - wayland                            # [linux]
+    - cuda-nvrtc 12.4.*
+    - libnvjpeg 12.4.*
